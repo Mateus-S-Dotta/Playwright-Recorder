@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Gravador Playwright",
+  "version": "2.2.0",
+  "description": "Clique para gravar a aba; clique de novo para baixar o teste Playwright e o vídeo.",
+  "minimum_chrome_version": "116",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "Clique para começar a gravar esta aba"
+  },
+  "permissions": ["storage", "scripting", "webNavigation", "downloads", "tabCapture", "offscreen"],
+  "host_permissions": ["<all_urls>"],
+  "devtools_page": "devtools.html"
+}

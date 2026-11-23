@@ -1,0 +1,164 @@
+{
+    "title": "1237561",
+    "steps": [
+        {
+            "type": "setViewport",
+            "width": 996,
+            "height": 791,
+            "deviceScaleFactor": 1,
+            "isMobile": false,
+            "hasTouch": false,
+            "isLandscape": false
+        },
+        {
+            "type": "navigate",
+            "url": "https://jsonplaceholder.typicode.com/",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://jsonplaceholder.typicode.com/",
+                    "title": "JSONPlaceholder - Free Fake REST API"
+                }
+            ]
+        },
+        {
+            "type": "navigate",
+            "url": "https://jsonplaceholder.typicode.com/",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://jsonplaceholder.typicode.com/",
+                    "title": ""
+                }
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Blog"
+                ],
+                [
+                    "header a:nth-of-type(3)"
+                ],
+                [
+                    "xpath//html/body/header/nav/a[3]"
+                ],
+                [
+                    "pierce/header a:nth-of-type(3)"
+                ],
+                [
+                    "text/Blog"
+                ]
+            ],
+            "offsetY": 13.19999885559082,
+            "offsetX": 8.3125
+        },
+        {
+            "type": "navigate",
+            "url": "https://jsonplaceholder.typicode.com/",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://jsonplaceholder.typicode.com/",
+                    "title": "JSONPlaceholder - Free Fake REST API"
+                }
+            ]
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Guide[role=\"link\"]"
+                ],
+                [
+                    "nav > a:nth-of-type(1)"
+                ],
+                [
+                    "xpath//html/body/header/nav/a[1]"
+                ],
+                [
+                    "pierce/nav > a:nth-of-type(1)"
+                ]
+            ],
+            "offsetY": 11.19999885559082,
+            "offsetX": 17.54998779296875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Filter"
+                ],
+                [
+                    "#tab-filter"
+                ],
+                [
+                    "xpath///*[@id=\"tab-filter\"]"
+                ],
+                [
+                    "pierce/#tab-filter"
+                ],
+                [
+                    "text/Filter"
+                ]
+            ],
+            "offsetY": 15.775001525878906,
+            "offsetX": 21.61248779296875
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "aria/Nested"
+                ],
+                [
+                    "#tab-nested"
+                ],
+                [
+                    "xpath///*[@id=\"tab-nested\"]"
+                ],
+                [
+                    "pierce/#tab-nested"
+                ],
+                [
+                    "text/Nested"
+                ]
+            ],
+            "offsetY": 26.775001525878906,
+            "offsetX": 13.662506103515625
+        },
+        {
+            "type": "click",
+            "target": "main",
+            "selectors": [
+                [
+                    "section:nth-of-type(4) tr:nth-of-type(1) a"
+                ],
+                [
+                    "xpath//html/body/main/section[4]/table/tbody/tr[1]/td[1]/a"
+                ],
+                [
+                    "pierce/section:nth-of-type(4) tr:nth-of-type(1) a"
+                ]
+            ],
+            "offsetY": 11.875,
+            "offsetX": 33.59999084472656
+        },
+        {
+            "type": "navigate",
+            "url": "https://jsonplaceholder.typicode.com/#nested",
+            "assertedEvents": [
+                {
+                    "type": "navigation",
+                    "url": "https://jsonplaceholder.typicode.com/#nested",
+                    "title": "JSONPlaceholder - Free Fake REST API"
+                }
+            ]
+        }
+    ]
+}
