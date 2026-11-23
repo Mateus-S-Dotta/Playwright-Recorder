@@ -242,7 +242,7 @@ function downloadFinished(id) {
     const onChanged = (delta) => {
       if (delta.id === id && ['complete', 'interrupted'].includes(delta.state?.current)) done();
     };
-    const timer = setTimeout(done, 120_000);
+    const timer = setTimeout(done, 10 * 60_000); // vídeos longos (GBs) em disco lento
     chrome.downloads.onChanged.addListener(onChanged);
     chrome.downloads.search({ id }).then(([item]) => {
       if (item && item.state !== 'in_progress') done();

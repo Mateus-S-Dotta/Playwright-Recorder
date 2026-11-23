@@ -9,12 +9,12 @@ let finished = null; // Promise<{ url, ext }> resolvida quando o recorder para
 let stream = null;
 let audioCtx = null;
 
-// MP4 abre em qualquer player do Windows/Mac; WebM é o fallback de Chromes antigos (< 126)
+// WebM porque dá para corrigir no fim (webm-fix.js) e deixar o vídeo navegável.
+// VP8 gasta menos CPU que VP9 em gravações longas.
 const FORMATS = [
-  { mime: 'video/mp4;codecs=avc1,mp4a.40.2', ext: 'mp4' },
-  { mime: 'video/mp4', ext: 'mp4' },
-  { mime: 'video/webm;codecs=vp9,opus', ext: 'webm' },
-  { mime: 'video/webm', ext: 'webm' },
+  'video/webm;codecs=vp8,opus',
+  'video/webm;codecs=vp9,opus',
+  'video/webm',
 ];
 
 async function start(streamId) {
@@ -27,16 +27,25 @@ async function start(streamId) {
     audioCtx.createMediaStreamSource(stream).connect(audioCtx.destination);
   }
 
-  const format = FORMATS.find((f) => MediaRecorder.isTypeSupported(f.mime)) || { mime: '', ext: 'webm' };
-  recorder = new MediaRecorder(stream, format.mime ? { mimeType: format.mime } : {});
+  const mimeType = FORMATS.find((f) => MediaRecorder.isTypeSupported(f));
+  recorder = new MediaRecorder(stream, {
+    ...(mimeType && { mimeType }),
+    // um quadro-chave a cada 2 s: é onde o player consegue pular no tempo (Chrome 124+; antes é ignorado)
+    videoKeyFrameIntervalDuration: 2000,
+  });
   const chunks = [];
   recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
   finished = new Promise((resolve) => {
-    recorder.onstop = () => {
+    recorder.onstop = async () => {
       stream.getTracks().forEach((t) => t.stop());
       audioCtx?.close().catch(() => {});
-      const blob = new Blob(chunks, { type: recorder.mimeType || format.mime || 'video/webm' });
-      resolve({ url: URL.createObjectURL(blob), ext: format.ext });
+      let blob = new Blob(chunks, { type: 'video/webm' });
+      try {
+        blob = await fixWebm(blob); // duração + índice, para poder pular no tempo
+      } catch (e) {
+        console.warn('[gravador] vídeo salvo sem índice de navegação:', e.message);
+      }
+      resolve({ url: URL.createObjectURL(blob), ext: 'webm' });
     };
   });
   recorder.start(1000); // um pedaço por segundo: não perde tudo se algo der errado no fim

@@ -11,11 +11,15 @@ Grava o que você faz numa aba e baixa um teste **Playwright** pronto.
 | Ícone | Estado | Clique |
 |---|---|---|
 | ▶ verde | parado | começa a gravar a aba atual |
-| ● cinza com ponto vermelho | gravando | finaliza e baixa `gravacao-<titulo>-<data>.spec.ts` + o vídeo (`.mp4`, ou `.webm` em Chrome < 126) |
+| ● cinza com ponto vermelho | gravando | finaliza e baixa `gravacao-<titulo>-<data>.spec.ts` + o vídeo `.webm` |
 
 - **Vídeo**: grava o conteúdo da aba (não a tela inteira) do início ao fim, inclusive ao trocar
   de página, com o som da aba. Enquanto grava, o Chrome mostra um indicador de captura na aba.
   Se a captura não for possível, os passos são gravados normalmente, só sem o vídeo.
+  - O vídeo sai **navegável** (dá para pular para qualquer minuto): ao finalizar, a extensão
+    acrescenta a duração e um índice ao arquivo, o que o navegador não faz sozinho. Em vídeos
+    longos isso leva alguns segundos antes do download começar.
+  - Abre no Chrome, no VLC e no Media Player do Windows 11.
 
 - Grava cliques, duplo clique, preenchimento de campos, selects, teclas (Enter, Tab, Esc, setas,
   atalhos) e navegações (link → `waitForURL`, URL digitada/voltar → `goto`).
@@ -119,12 +123,13 @@ dela, só o passo 4 precisa.
 |---|---|
 | `background.js` | Service worker: ícone, iniciar/finalizar, navegações, download |
 | `offscreen.html` / `offscreen.js` | Grava o vídeo da aba (MediaRecorder), pois o service worker não tem acesso a mídia |
+| `webm-fix.js` | Acrescenta duração e índice (Cues) ao WebM gravado, para dar para pular no tempo |
 | `recorder.js` | Content script: captura as ações e pede os locators ao gerador do Playwright |
 | `vendor/playwright-injected.js` | **Gerado** — InjectedScript do Playwright (gerador de seletores). Não editar |
 | `tools/build-injected.mjs` | Gera o arquivo acima a partir do `playwright-core` (`./npm.sh run build:extension`) |
 | `converter.js` | Steps gravados / JSON do Recorder → código Playwright (sem dependências) |
 | `devtools.js` | Registra o formato no painel Recorder do DevTools |
-| `test/` | `./npm.sh run test:extension` (conversor) e `./npm.sh run test:extension:e2e` (extensão no Chromium, grava e roda o teste gerado) |
+| `test/` | `./npm.sh run test:extension` (conversor) e `./npm.sh run test:extension:e2e` (extensão no Chromium, grava e roda o teste gerado) e `./npm.sh run test:extension:video` (grava vídeos reais e confere a correção do `webm-fix.js`) |
 
 ## Limitações
 - Não grava em páginas internas (`chrome://`, Chrome Web Store) nem em abas novas abertas por
