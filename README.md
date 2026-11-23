@@ -32,10 +32,21 @@ Ele fica embutido em `vendor/playwright-injected.js`, então a extensão não de
 instalado na máquina e o código gerado (API pública `getBy*`) roda em qualquer versão recente.
 
 - Versão embutida: a do `@playwright/test` no `package.json` (hoje **1.52.0**).
-- Atualizar (opcional, quando quiser as melhorias de uma versão nova): troque a versão no
-  `package.json`/`Dockerfile`, rode `./npm.sh install`, `./npm.sh run build:extension` e
-  `./npm.sh run test:extension:e2e`. O script usa código interno do Playwright; se a estrutura
-  mudar, ele avisa com um erro em vez de gerar um arquivo quebrado.
+- **Atualizar a lógica do Playwright** (opcional, quando quiser as melhorias de uma versão nova):
+  - **De onde vem:** `vendor/playwright-injected.js` é uma cópia, embrulhada para rodar no
+    navegador, do *InjectedScript* do pacote npm `playwright-core`, que fica em
+    `node_modules/playwright-core/lib/generated/injectedScriptSource.js`. É o mesmo código que o
+    Playwright injeta nas páginas e que o `codegen` usa para escolher os seletores.
+  - **Como atualizar:** instale a versão desejada (`npm i -D @playwright/test@<versão>`, que traz o
+    `playwright-core` junto) e gere o arquivo de novo com `node extension/tools/build-injected.mjs`.
+    Não edite nem cole o arquivo à mão.
+  - **Depois:** recarregue a extensão no navegador e grave algo para conferir.
+    O script lê código interno (não público) do Playwright: se uma versão nova mudar essa
+    estrutura, ele para com um erro em vez de gerar um arquivo quebrado, e aí o script precisa
+    ser ajustado.
+  - *Neste repositório:* a versão também fica no `Dockerfile` (imagem `playwright:vX.Y.Z`), os
+    comandos rodam via `./npm.sh` (`install`, `run build:extension`) e
+    `./npm.sh run test:extension:e2e` testa a extensão de ponta a ponta.
 - O nome acessível depende do idioma do navegador (ex.: um botão do framework pode se chamar
   "Excluir" em pt-BR e "Delete" em en-US). Rode o teste com o mesmo `locale` usado na gravação.
 
